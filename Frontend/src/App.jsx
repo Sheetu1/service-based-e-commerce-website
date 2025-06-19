@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout"; // ✅ NEW import
+import Success from "./pages/Success";
 import { useState } from "react";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
           <Route path="/cart" element={<Cart cartItems={cartItems} />} />
           <Route path="/checkout" element={<Checkout cartItems={cartItems} />} /> {/* ✅ NEW route */}
+          <Route path="/success" element={<Success />} />
         </Routes>
       </div>
     </Router>

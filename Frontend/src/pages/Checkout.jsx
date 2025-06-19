@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function loadRazorpayScript(src) {
   return new Promise((resolve) => {
@@ -11,6 +12,7 @@ function loadRazorpayScript(src) {
 }
 
 function Checkout({ cartItems }) {
+  const navigate = useNavigate();
   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
 
   const handlePayment = async () => {
@@ -21,32 +23,42 @@ function Checkout({ cartItems }) {
       return;
     }
 
-    const options = {
-      key: "rzp_test_YK0C3LDt0oGZVq", // ✅ Test key (frontend only)
-      amount: total * 100, // ✅ In paise
-      currency: "INR",
-      name: "Service Booking",
-      description: "Payment for services",
-      image: "https://via.placeholder.com/100", // Optional logo
-      handler: function (response) {
-        alert("✅ Payment Successful! \nPayment ID: " + response.razorpay_payment_id);
-        console.log(response);
-      },
-      prefill: {
-        name: "Test User",
-        email: "testuser@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "Service Booking App Demo",
-      },
-      theme: {
-        color: "#1E40AF",
-      },
-    };
+    try {
+      // 🔹 Step 1: Create order from backend
+      const orderRes = await axios.post("http://localhost:5000/create-order", {
+        amount: total,
+      });
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const { order } = orderRes.data;
+
+      const options = {
+        key: "rzp_test_YTxJmECg9DB2Up", // ✅ Your test key
+        amount: order.amount,
+        currency: order.currency,
+        name: "Service Booking",
+        description: "Payment for services",
+        order_id: order.id, // ✅ Important
+        handler: function (response) {
+          console.log("✅ Payment successful:", response);
+          // 🔁 Redirect to success page
+          navigate("/success");
+        },
+        prefill: {
+          name: "Test User",
+          email: "test@example.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#1E40AF",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("Payment failed:", err);
+      alert("Payment failed. Please try again.");
+    }
   };
 
   return (
