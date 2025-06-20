@@ -4,11 +4,15 @@ import axios from "axios";
 function Home({ onAddToCart }) {
   const [services, setServices] = useState([]);
 
-  useEffect(() => {
-   axios.get("http://localhost:5000/services")
-      .then((res) => setServices(res.data))
-      .catch((err) => console.error("Failed to load services:", err));
-  }, []);
+useEffect(() => {
+  axios.get("http://localhost:5000/services")
+    .then((res) => {
+      console.log("📦 API se aaya data:", res.data); // ✅
+      setServices(res.data);
+    })
+    .catch((err) => console.error(err));
+}, []);
+
 
   return (
     <div className="p-6">

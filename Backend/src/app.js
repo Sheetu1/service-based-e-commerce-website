@@ -13,7 +13,7 @@ connectDB();
 const orderRoutes = require("./routes/orderRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 
-app.use('/service',orderRoutes);
-app.use('/find',serviceRoutes);
+app.use(orderRoutes);
+app.use(serviceRoutes);
 
 module.exports = app;
