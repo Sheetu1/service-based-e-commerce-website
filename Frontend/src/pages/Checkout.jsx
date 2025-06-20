@@ -25,22 +25,21 @@ function Checkout({ cartItems }) {
 
     try {
       // 🔹 Step 1: Create order from backend
-      const orderRes = await axios.post("http://localhost:5000/create-order", {
+      const orderRes = await axios.post("https://service-based-e-commerce-website-2.onrender.com/create-order", {
         amount: total,
       });
 
       const { order } = orderRes.data;
 
       const options = {
-        key: "rzp_test_YTxJmECg9DB2Up", // ✅ Your test key
+        key: "rzp_test_YTxJmECg9DB2Up", 
         amount: order.amount,
         currency: order.currency,
         name: "Service Booking",
         description: "Payment for services",
-        order_id: order.id, // ✅ Important
+        order_id: order.id, 
         handler: function (response) {
-          console.log("✅ Payment successful:", response);
-          // 🔁 Redirect to success page
+          console.log(" Payment successful:", response);
           navigate("/success");
         },
         prefill: {

@@ -5,8 +5,10 @@ function Home({ onAddToCart }) {
   const [services, setServices] = useState([]);
 
 useEffect(() => {
-  axios.get("http://localhost:5000/services")
+  axios.get("https://service-based-e-commerce-website-2.onrender.com/services")
     .then((res) => {
+      console.log(res);
+      
       setServices(res.data);
     })
     .catch((err) => console.error(err));
