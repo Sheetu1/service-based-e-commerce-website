@@ -1,40 +1,37 @@
-const mongoose = require("mongoose");
+const connectDB = require("./db/db"); 
 const Service = require("./models/Service");
 require("dotenv").config();
 
-const connectAndSeed = async () => {
+const seedServices = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("MongoDB connected");
+    await connectDB(); 
 
-    await Service.deleteMany(); 
-
-    const dummyServices = [
+    const dummyData = [
       {
         name: "Home Cleaning",
         price: 500,
-        description: "Deep clean your entire house",
+        description: "Deep cleaning for your entire home",
       },
       {
-        name: "Consultation",
+        name: "Online Consultation",
         price: 999,
-        description: "Expert advice on demand",
+        description: "Expert consultation on call",
       },
       {
         name: "AC Repair",
         price: 1200,
-        description: "Fix your cooling systems",
+        description: "Quick AC repair service",
       },
     ];
 
-    await Service.insertMany(dummyServices);
-    console.log(" Dummy services inserted");
+    await Service.insertMany(dummyData);
+    console.log("Dummy services..");
 
     process.exit();
   } catch (err) {
-    console.error("Seeding failed:", err);
+    console.error( err.message);
     process.exit(1);
   }
 };
 
-connectAndSeed();
+seedServices();
