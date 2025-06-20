@@ -7,7 +7,6 @@ function Home({ onAddToCart }) {
 useEffect(() => {
   axios.get("http://localhost:5000/services")
     .then((res) => {
-      console.log("📦 API se aaya data:", res.data); // ✅
       setServices(res.data);
     })
     .catch((err) => console.error(err));
